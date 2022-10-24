@@ -1,0 +1,65 @@
+﻿@page "/"
+@page "/{R1X:float}/{R1Y:float}/{R2X:float}/{R2Y:float}"
+@page "/{R1X:float}/{R1Y:float}/{R2X:float}/{R2Y:float}/{R1Width:int}/{R1Height:int}/{R2Width:int}/{R2Height:int}"
+
+
+
+
+
+
+@if (Intersections.Any())
+{
+    foreach (var interPoint in Intersections)
+    {
+        <div class="IntersectionMark" style="left: @(interPoint.PositionX)px; top: @(interPoint.PositionY)px;" title="@($"(X= {interPoint.PositionX} Y= {interPoint.PositionY})")">
+            
+        </div>
+     
+    }
+}
+<div id="Rect1" class="Rectangle Color1" style="transform: translate(@(R1X)px, @(R1Y)px); width: @(R1Width)px; height: @(R1Height)px; " @onmousemove="@((e) => OnMouseMove("Rect1",e))">
+
+</div>
+
+<div id="Rect2" class="Rectangle Color2" style="transform: translate(@(R2X)px, @(R2Y)px); width: @(R2Width)px; height: @(R2Height)px; " @onmousemove="@((e) => OnMouseMove("Rect2",e))">
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<footer class="ActionsContainer">
+    
+        <div class="d-inline-flex flex-column m-1">
+            <div class="d-inline-flex">
+                <h4 class="text-white">Coordinates:</h4> <p class="text-white-50 m-1">(Values returned are rounded to keep simpler for demonstration purpose)</p>
+            </div>
+            <div class="d-inline-flex">
+                <div style="border: solid; border-width: 1px; background-color: blue; width: 15px; height: 15px; margin-right: 3px;"> </div>
+                <h6 class="text-white"> Top-Left:( X = @Rect1.TopLeftCorner.PositionX Y = @Rect1.TopLeftCorner.PositionY ) / Bottom-Right:( X = @Rect1.BottomRightCorner.PositionX Y = @Rect1.BottomRightCorner.PositionY )</h6>
+            </div>
+            <div class="d-inline-flex">
+                <div style="border: solid; border-width: 1px; background-color: red; width: 15px; height: 15px; margin-right: 3px;"> </div>
+                <h6 class="text-white"> Top-Left: ( X = @Rect2.TopLeftCorner.PositionX Y = @Rect2.TopLeftCorner.PositionY ) / Bottom-Right:( X = @Rect2.BottomRightCorner.PositionX Y = @Rect2.BottomRightCorner.PositionY )</h6>
+            </div>
+            <div class="d-inline-flex">
+                <button class="btn btn-primary" style="width:120px"  @onclick="@(async ()=> await AnalyzeRectangles())">Analyze</button>
+                <button class="btn btn-secondary m-1"  @onclick="ClearResults">Clear</button>
+            </div>
+        </div>
+        
+   
+    <div class="d-inline-flex flex-column" style="width: 100%;">
+        <h6 class="text-white">Results:</h6> 
+        <div class="p-1 m-1 bg-light" style=" flex: 1; min-height: 50px; min-width: 250px; border: solid; border-width: 1px;  border-radius:5px ">
+            @Observation
+        </div>
+    </div>
+</footer>
