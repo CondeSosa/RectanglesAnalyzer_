@@ -10,7 +10,7 @@ using Application.Models;
 
 namespace Application.Services
 {
-    public class RectAnalizer : IRectAnalizer
+    public class RectAnalizer : IRectAnalizer 
     {
         private readonly VectorIntersection _vectorIntersection;
         private readonly ContainmentChecker _containmentChecker;
@@ -42,6 +42,8 @@ namespace Application.Services
                 {
 
                     //We analyze every side of both rectangles and add results to this list of IntersectionResults
+                    //for the adjacent cases we only want to check those lines that would be opposite from each other
+                    //for example top-bottom lines and left-right lines of both rectangles
                     List<IntersectionResults> intersections = new List<IntersectionResults>();
                     Line rect1Line = new Line();
                     bool checkAdjacent = false;
@@ -97,7 +99,7 @@ namespace Application.Services
 
                     }
 
-
+                    //After getting all the possible results
                     //Verify if there is any adjacent
                     bool isAdjacent = intersections.Any(x => x.IsAdjacent == true);
 
@@ -110,14 +112,15 @@ namespace Application.Services
                     else
                     {
 
-
-                        //Verify if any intersection occurred
+                        //If there is no adjacency we check for possible intersections
                         bool hasIntersection = intersections.Any(x => x.HasIntersection == true);
 
                         analysisResult.HasIntersection = hasIntersection;
 
                         if (hasIntersection)
                         {
+                            // We pass all the intersections to our analysis result
+                            // just in case we check for no null points in our list
                             var intersectionPoints =
                                 intersections.Where(x => x.Intersection != null).Select(x => x.Intersection).ToList();
 
@@ -139,5 +142,7 @@ namespace Application.Services
             }
 
         }
+
+       
     }
 }

@@ -32,12 +32,18 @@ namespace Application.Helpers
 
             if (checkAdjacent)
             {
-                // equations of the form x=c (two vertical lines) with overlapping
+
+                //We check if the two lines are vertical with overlapping
+                //the _addTolerance field was added to increment a bit more the tolerance
+                //when checking only if the lines are adjacent or not
                 if (Math.Abs(x1 - x2) < tolerance + _addTolerance && Math.Abs(x3 - x4) < tolerance + _addTolerance &&
                     Math.Abs(x1 - x3) < tolerance + _addTolerance)
                 {
 
                     result.IsAdjacent = true;
+                    //Given the fact that the lines are overlapping know we will check 
+                    //what type of adjacency we came across so first we check if 
+                    //both vectors are align at the exact (with tolerance) position on both top and bottom y-axis
 
                     if (Math.Abs(y1 - y3) < tolerance + _addTolerance &&
                         Math.Abs(y4 - y2) < tolerance + _addTolerance && Math.Abs(y1 - y3) < tolerance + _addTolerance)
@@ -46,6 +52,9 @@ namespace Application.Helpers
                     }
                     else
                     {
+                        //knowing that it not align we now check if one line exceed the other 
+                        //and if it does it would then indicate that its a partial adjacent case
+                        //else it would be a sub-line
                         if (y1 - y3 > tolerance + _addTolerance && y4 - y2 < tolerance + _addTolerance ||
                             y1 - y3 < tolerance + _addTolerance && y4 - y2 > tolerance + _addTolerance)
                         {
@@ -53,23 +62,29 @@ namespace Application.Helpers
                         }
                         else
                         {
+                           
                             result.AdjacentType = (int)AdjacentTypes.SubLine;
                         }
                     }
 
 
-
+                    //return intersection result with no intersection but confirming that its adjacent
                     return result;
 
                 }
 
-                //equations of the form y=c (two horizontal lines) with overlapping
+                //We check if the two lines are horizontal with overlapping
+                //the _addTolerance field was added to increment a bit more the tolerance
+                //when checking only if the lines are adjacent or not
                 if (Math.Abs(y1 - y2) < tolerance + _addTolerance && Math.Abs(y3 - y4) < tolerance + _addTolerance &&
                     Math.Abs(y1 - y3) < tolerance + _addTolerance)
                 {
 
-                    result.IsAdjacent = true;
 
+                    result.IsAdjacent = true;
+                    //Given the fact that the lines are overlapping know we will check 
+                    //what type of adjacency we came across so first we check if 
+                    //both vectors are align at the exact (with tolerance) position on both left and right x-axis
                     if (Math.Abs(x1 - x3) < tolerance + _addTolerance &&
                         Math.Abs(x4 - x2) < tolerance + _addTolerance && Math.Abs(x1 - x3) < tolerance + _addTolerance)
                     {
@@ -77,6 +92,9 @@ namespace Application.Helpers
                     }
                     else
                     {
+                        //knowing that it not align we now check if one line exceed the other 
+                        //and if it does it would then indicate that its a partial adjacent case
+                        //else it would be a sub-line
                         if (x1 - x3 > tolerance + _addTolerance && x4 - x2 < tolerance + _addTolerance ||
                             x1 - x3 < tolerance + _addTolerance && x4 - x2 > tolerance + _addTolerance)
                         {
@@ -89,13 +107,16 @@ namespace Application.Helpers
 
                     }
 
-
+                    //return intersection result with no intersection but confirming that its adjacent
                     return result;
 
                 }
             }
 
            
+
+
+
 
             //general equation of line is y = mx + c where m is the slope
             //assume equation of line 1 as y1 = m1x1 + c1 
@@ -164,7 +185,7 @@ namespace Application.Helpers
                 if (!(Math.Abs(-m1 * x + y - c1) < tolerance
                     && Math.Abs(-m2 * x + y - c2) < tolerance))
                 {
-                    //return default (no intersection)
+                    //return intersection result with no intersection
                     return result;
                 }
             }
@@ -176,10 +197,12 @@ namespace Application.Helpers
             {
                 result.HasIntersection = true;
                 result.Intersection = new Point { PositionX = x, PositionY = y };
+
+                //return intersection result with intersection
                 return result;
             }
 
-            //return default (no intersection)
+            //return intersection result with no intersection
             return result;
 
         }
